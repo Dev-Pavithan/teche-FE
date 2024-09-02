@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:700');
+
+
+
+.Btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff;
+  background: linear-gradient(to right, #d689ff, #e498ff, #f2a8ff, #ffb7ff);
+  
+  border: none;
+  border-radius: 8px;
+  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+  margin-right: 10px; 
+}
+
+.Btn:last-child {
+  margin-right: 0; 
+}
+
+.Btn:hover {
+  background: linear-gradient(to right, #e498ff, #f2a8ff, #ffb7ff, #d689ff);
+  transform: scale(1.05); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.Btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 182, 255, 0.5); 
+}
+
+
+
+.img-fluid {
+  max-width: 100%;
+  height: auto; 
+}
+
+.intro-section{
+  margin-top: 80px;
+}
+
+
+.intro-section h3 {
+  font-size: 48px;
+  font-weight: 700;
+  opacity: 1;
+  color: #822faf;
+  animation: slideBottom 1s ease forwards;
+  animation-delay: 0.5s;
+  font-family: 'Figtree'; 
+}
+
+.intro-section h3:nth-of-type(2) {
+  margin-bottom: 30px;
+  animation: slideTop 1s ease forwards;
+  animation-delay: 0.7s;
+}
+
+.intro-section h3 span {
+  color: #ea698b; 
+  font-weight: bold;
+  font-family: 'Orbitron', sans-serif; 
+  text-shadow: 0 0 10px rgba(234, 105, 139, 0.7); 
+}
+
+.intro-section p {
+  font-size: 25px;
+  opacity: 1;
+  color: #000000; 
+  animation: slideLeft 1s ease forwards;
+  animation-delay: 1s;
+  font-family: 'Figtree'; 
+}
+
+.Btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff;
+  background: linear-gradient(to right, #d689ff, #e498ff, #f2a8ff, #ffb7ff);
+  border: none;
+  border-radius: 8px;
+  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  margin-right: 10px;
+  font-family: 'Figtree'; 
+}
+
+.Btn:last-child {
+  margin-right: 0;
+}
+
+.Btn:hover {
+  background: linear-gradient(to right, #e498ff, #f2a8ff, #ffb7ff, #d689ff);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideBottom {
+  from {
+      transform: translateY(-50px);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+@keyframes slideTop {
+  from {
+      transform: translateY(50px);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+      transform: translateX(-50px);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+
+

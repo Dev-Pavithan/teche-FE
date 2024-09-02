@@ -1,0 +1,56 @@
+
+
+.footer-custom {
+    background: linear-gradient(to left, #822faf, #973aa8, #c05299);
+    padding: 10px 0;
+    margin-top: auto; 
+    /* border-top-left-radius: 40px; 
+    border-top-right-radius: 40px; */
+}
+
+.footer-custom h5 {
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.footer-custom p, 
+.footer-custom ul,
+.footer-custom li {
+    color: #ffffff;
+}
+
+.footer-custom ul {
+    padding: 0;
+    list-style: none;
+}
+
+.footer-custom a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-custom a:hover {
+    text-decoration: underline;
+}
+
+.footer-custom .text-center {
+    background: linear-gradient(to left, #822faf, #973aa8, #c05299);
+    padding: 10px 0;
+    color: #ffffff;
+}
+
+.footer-custom .fab {
+    font-size: 1.5rem;
+    transition: all 0.3s ease-in-out; 
+}
+
+.footer-custom .fab:hover {
+    color: #ea698b; 
+    text-shadow: 0 0 10px rgba(234, 105, 139, 0.8); 
+}
+
+.footer-custom .col-lg-4,
+.footer-custom .col-md-6,
+.footer-custom .col-md-12 {
+    margin-bottom: 20px; /* Adjust the space between sections */
+}
