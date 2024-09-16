@@ -66,7 +66,7 @@ export default function Contact() {
         // Success toast message
         toast.success('Message submitted successfully!', {
           position: "top-right",
-          autoClose: 5000, // Close the toast after 5 seconds
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -77,7 +77,7 @@ export default function Contact() {
         // Redirect to home page after 5 seconds
         setTimeout(() => {
           navigate('/');
-        }, 5000); // 5000 milliseconds = 5 seconds
+        }, 5000); 
 
         // Clear form data
         setFormData({ name: '', email: '', phone: '', message: '' });
@@ -96,7 +96,7 @@ export default function Contact() {
       <div className="screen">
         <div className="screen__content">
           <form className="contact" onSubmit={handleSubmit}>
-            <h1>Tell Us</h1>
+            <h1>Contact Us</h1>
             <div className="contact__field">
               <i className="contact__icon fas fa-user"></i>
               <input
@@ -155,6 +155,10 @@ export default function Contact() {
             </button>
           </form>
         </div>
+
+
+
+        
         <div className="screen__background">
           <span className="screen__background__shape screen__background__shape4"></span>
           <span className="screen__background__shape screen__background__shape3"></span>        

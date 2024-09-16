@@ -1,0 +1,18 @@
+.hero-02 {
+    margin-top: 80px;
+    align-content: center;
+    background: linear-gradient(135deg, #9b4ec8, #e98ffb);
+    min-height: 100vh;
+    color: white;
+  }
+  
+  .card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 15px;
+  }
+  
+  .card-title {
+    font-weight: bold;
+  }
+  

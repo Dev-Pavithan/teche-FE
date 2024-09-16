@@ -78,9 +78,10 @@ export default function UserManagement() {
   };
 
   return (
+    
     <div className="container mt-4 user-management">
       <h2 className="mb-4">Manage Users</h2>
-
+    
       {/* Search Bar */}
       <div className="d-flex justify-content-end mb-3">
         <input

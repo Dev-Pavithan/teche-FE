@@ -1,0 +1,111 @@
+
+
+
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    font-weight: 600;
+}
+
+input.form-control,
+textarea.form-control {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+}
+
+textarea.form-control {
+    height: 150px;
+    resize: vertical;
+}
+
+/* Button styling */
+.btn {
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+
+
+
+.btn-edit {
+    background-color: #249115;
+    border-color: #249115;
+    color: #212529;
+}
+
+.btn-edit:hover {
+    background-color: #62b14a;
+    border-color: #62b14a;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+
+/* package.css */
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: 600;
+}
+
+input.form-control,
+textarea.form-control {
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+}
+
+textarea.form-control {
+  height: 150px;
+  resize: vertical;
+}
+
+/* Button styling */
+.btn {
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+}
+
+.btn-edit {
+  background-color: #249115;
+  border-color: #249115;
+  color: #212529;
+}
+
+.btn-edit:hover {
+  background-color: #62b14a;
+  border-color: #62b14a;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}

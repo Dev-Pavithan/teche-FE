@@ -18,7 +18,6 @@ export default function Nav() {
 
   // Handle user logout
   const handleLogout = () => {
-    // Clear session storage
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('role');
@@ -34,33 +33,34 @@ export default function Nav() {
     <div>
       <nav className="navbar navbar-expand-lg navbar-custom">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
-            <img alt="Logo" src={logo} className="Logo" />
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul className="navbar-nav">
+          {/* Left side: Navigation links */}
+          <div className="d-flex align-items-center">
+            <ul className="navbar-nav me-auto">
               <li className="nav-item">
                 <Link className="nav-link" to="/"><i className="fas fa-home"></i> Home</Link>
               </li>
-              
               <li className="nav-item">
-                <Link className="nav-link" to="/features"><i className="fas fa-cogs"></i> Features</Link>
-              </li>
+  <Link className="nav-link" to="/features">
+    <i className="fas fa-blog"></i> Blog
+  </Link>
+</li>
+
               <li className="nav-item">
-                <Link className="nav-link" to="/contact"><i className="fas fa-envelope"></i> Tell Us</Link>
+                <Link className="nav-link" to="/contact"><i className="fas fa-envelope"></i> Contact Us</Link>
               </li>
-              {/* Conditional rendering based on login state */}
+            </ul>
+          </div>
+
+          {/* Center: Logo */}
+          <div className="navbar-brand mx-auto">
+            <Link to="/">
+              <img alt="Logo" src={logo} className="Logo" />
+            </Link>
+          </div>
+
+          {/* Right side: Login/Logout button */}
+          <div className="d-flex align-items-center ms-auto">
+            <ul className="navbar-nav">
               {isLoggedIn ? (
                 <li className="nav-item">
                   <button className="nav-link btn btn-link" onClick={handleLogout}>

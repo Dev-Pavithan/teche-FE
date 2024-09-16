@@ -3,7 +3,8 @@ import Typed from 'typed.js';
 import { Link } from 'react-router-dom'; 
 import './Home.css';
 import avatar01 from './landing page-a1.png';
-
+import Features from '../Features/features';
+import QuestionBox from '../QuestionBox/qu.js'
 export default function Home() {
   useEffect(() => {
     const options = {
@@ -24,6 +25,7 @@ export default function Home() {
   }, []);
 
   return (
+    <div>
     <div className="hero">
       <main className="flex-fill container mt-4">
         <div className="row">
@@ -45,6 +47,13 @@ export default function Home() {
           </div>
         </div>
       </main>
+    </div>
+
+<Features />
+<QuestionBox />
+
+    
+
     </div>
   );
 }

@@ -1,20 +1,184 @@
+.navbarHome {
+  position: relative;
+}
 
+.navbarHome-icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  color: #fff;
+  padding-top: 120px;
+}
+
+.icon-wrapper {
+  position: relative;
+  margin-left: 15px;
+}
+
+.icon {
+  font-size: 28px;
+  color: #3d0181;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.icon:hover {
+  color: #6a4b7b;
+  transform: scale(1.2);
+}
+
+/* Notification Styles */
+.notification-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: rgb(243, 92, 92);
+  color: white;
+  border-radius: 50%;
+  padding: 3px 6px;
+  font-size: 14px;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: rgb(252, 247, 247);
+  color: #00000093;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 250px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.384);
+}
+
+.list-group-notification {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list-group-notification li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.list-group-notification li:last-child {
+  border-bottom: none;
+}
+
+.btn-clear {
+  display: block;
+  width: 100%;
+  border-radius: 0 0 5px 5px;
+  background-color: #6a4b7b;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-clear:hover {
+  background-color: #5a3b6a;
+  color: white;
+}
+
+/* Card Styles */
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.555);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-title {
+  margin-bottom: 1rem;
+}
+
+/* Chart Info */
+.chart-info {
+  padding-top: 10px;
+}
+
+/* Home Container */
 .home-container {
-    padding: 20px;
-  }
-  
-  .pie-chart-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .chart-info {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .chart-info p {
-    font-size: 1.2em;
-  }
-  
+  padding-top: 250px;
+}
+
+/* List Group Styles */
+.list-group {
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.list-group-item {
+  border: none;
+  padding: 10px 15px;
+  border-bottom: 1px solid #dee2e6;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item:hover {
+  background-color: #9900ff65;
+  transform: scale(1.02);
+}
+
+/* Message Highlight Styles */
+.list-group-item strong {
+  color: #7c32f1;
+}
+
+/* Empty State Styles */
+.list-group-item.no-messages {
+  text-align: center;
+  color: #796c7d;
+  font-style: italic;
+}
+
+/* Card Styles */
+.card.h-100 {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.card-title {
+  font-size: 18px;
+}
+.card-title03{
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.message-count {
+  font-size: 250px;
+  font-weight: bold;
+  color: #6f42c1;
+}
+
+.below-text {
+  font-size: 24px;
+}
+
+.count {
+  transition: font-size 0.3s ease-in-out;
+}
+
+

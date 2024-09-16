@@ -90,13 +90,33 @@
     border-top-right-radius: 15px;
 }
 
-/* Responsive Design */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.card-subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.card-text {
+    font-size: 0.875rem;
+}
 
 /* Tablets */
 @media (max-width: 992px) {
     .row-cols-md-2 {
         column-count: 2;
     }
+}
+.card-img-top {
+    height: 200px; 
+    object-fit: cover; 
 }
 
 /* Small Devices */
