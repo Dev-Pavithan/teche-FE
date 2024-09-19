@@ -29,6 +29,15 @@
   color: #333;
 }
 
+.left-navbar h1 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  border-bottom: 1px solid #b676f3;
+  padding-bottom: 10px;
+  color: #ecf0f1;
+  cursor: pointer;
+}
+
 .left-navbar button {
   padding: 10px 20px;
   font-size: 16px;
@@ -37,22 +46,50 @@
   border: none;
   color: #ecf0f1;
   border-radius: 4px;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s, transform 0.2s; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-
-h1 {
-  margin-bottom: 20px;
-  font-size: 22px;
-  border-bottom: 1px solid #b676f3;
-  padding-bottom: 10px;
+.left-navbar button:hover {
+  transform: scale(1.05); 
 }
 
 .left-navbar button.active {
-  font-weight: bold; 
-  border: 1px solid #8e1abc; 
+  font-weight: bolder; 
+  transform: scale(1.05); 
+}
+
+.left-navbar button.active i {
+  color: #000000; 
+
+  }
+
+.left-navbar i {
+  font-size: 18px;
+  color: #ffffff; 
 }
 
 .home-container {
   padding: 20px;
 }
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+
+  .left-navbar {
+    width: 100%;
+    height: auto;
+    position: static;
+    box-shadow: none;
+  }
+
+  .right-section {
+    margin-left: 0;
+  }
+}
+
+

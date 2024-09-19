@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Login.css';
@@ -14,6 +14,16 @@ export default function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check if redirectToPayment state is present
+    if (location.state?.redirectToPayment) {
+      const { amount } = location.state;
+      // Save the amount to sessionStorage or pass it along to the payment page
+      sessionStorage.setItem('paymentAmount', amount);
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     setFormData({
@@ -39,30 +49,24 @@ export default function Login() {
       const response = await axios.post('http://localhost:7100/user/login', formData);
       console.log('Login successful:', response.data);
 
-      // Assuming the response contains user data including role and token
-      const { role, userId, token } = response.data; 
+      const { role, userId, token } = response.data;
 
-      // Store data in session storage
       sessionStorage.setItem('role', role);
       sessionStorage.setItem('userId', userId);
-      sessionStorage.setItem('token', token); 
+      sessionStorage.setItem('token', token);
 
-      // Success toast message
       toast.success('Login successful! Redirecting...', {
         position: 'top-right',
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
 
-      // Redirect based on user role
-      if (role === 'admin') {
-        navigate('/admin'); 
+      // Redirect based on user role or payment redirect
+      if (location.state?.redirectToPayment) {
+        navigate('/payment');
+      } else if (role === 'admin') {
+        navigate('/admin');
       } else {
-        navigate('/'); 
+        navigate('/');
       }
     } catch (error) {
       console.error('Login failed:', error);
@@ -72,6 +76,24 @@ export default function Login() {
 
   return (
     <div className="login-container">
+      <div className="robot">
+        <div className="modelViewPort">
+          <div className="eva">
+            <div className="head">
+              <div className="eyeChamber">
+                <div className="eye"></div>
+                <div className="eye"></div>
+              </div>
+            </div>
+            <div className="body">
+              <div className="hand"></div>
+              <div className="hand"></div>
+              <div className="scannerThing"></div>
+              <div className="scannerOrigin"></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="login-box">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>

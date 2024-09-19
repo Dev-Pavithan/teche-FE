@@ -1,0 +1,27 @@
+.payment-container {
+    margin-top: 50px;
+  }
+  
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .payment-form {
+    max-width: 100%;
+  }
+  
+  .payment-form .form-control {
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .payment-form button {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .payment-form button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  

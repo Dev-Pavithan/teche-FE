@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './nav.css';
 import logo from './Logo version04.png';
@@ -40,11 +40,10 @@ export default function Nav() {
                 <Link className="nav-link" to="/"><i className="fas fa-home"></i> Home</Link>
               </li>
               <li className="nav-item">
-  <Link className="nav-link" to="/features">
-    <i className="fas fa-blog"></i> Blog
-  </Link>
-</li>
-
+                <Link className="nav-link" to="/features">
+                  <i className="fas fa-blog"></i> Blog
+                </Link>
+              </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/contact"><i className="fas fa-envelope"></i> Contact Us</Link>
               </li>

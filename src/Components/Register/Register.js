@@ -71,6 +71,24 @@ export default function Register() {
 
   return (
     <div className="Register-container">
+      <div classNames="robot">
+        <div className="modelViewPort">
+          <div className="eva">
+            <div className="head">
+              <div className="eyeChamber">
+                <div className="eye"></div>
+                <div className="eye"></div>
+              </div>
+            </div>
+            <div className="body">
+              <div className="hand"></div>
+              <div className="hand"></div>
+              <div className="scannerThing"></div>
+              <div className="scannerOrigin"></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="Register-box">
         <h2>Register</h2>
         <form onSubmit={handleSubmit}>
