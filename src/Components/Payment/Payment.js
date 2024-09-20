@@ -117,7 +117,6 @@
 // export default Payment;
 
 
-
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -135,23 +134,35 @@ const CheckoutForm = () => {
   const elements = useElements();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
+  
+  // New state for cardholder's name
+  const [cardholderName, setCardholderName] = useState('');
+  
   // Fixed amount of $30 (in cents)
   const amount = 3000;
   
   // Package details (hardcoded to a specific package for now)
   const packageDetails = {
     name: 'Fixed $30 Package',
-    description: 'Payment for a fixed package of $30'
+    description: 'Payment for a fixed package of $30',
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
+    if (!cardholderName.trim()) {
+      toast.error('Please enter the cardholder\'s name');
+      setLoading(false);
+      return;
+    }
+
     try {
-      // Create PaymentIntent with the fixed amount in cents
-      const response = await axios.post('http://localhost:7100/api/payments/payment-intent', { amount });
+      // Create PaymentIntent with the fixed amount in cents and cardholder name
+      const response = await axios.post('http://localhost:7100/api/payments/payment-intent', {
+        amount,
+        cardholderName, // Add cardholder name to the request
+      });
 
       const { clientSecret } = response.data;
 
@@ -159,6 +170,9 @@ const CheckoutForm = () => {
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement),
+          billing_details: {
+            name: cardholderName, // Send the cardholder's name to Stripe
+          },
         },
       });
 
@@ -166,7 +180,7 @@ const CheckoutForm = () => {
         toast.error('Payment failed: ' + error.message);
       } else if (paymentIntent.status === 'succeeded') {
         toast.success(`Payment of $${amount / 100} successful! Thank you for your purchase.`);
-        navigate('/'); 
+        navigate('/');
       } else {
         toast.error('Payment failed. Please try again.');
       }
@@ -181,15 +195,34 @@ const CheckoutForm = () => {
   return (
     <form onSubmit={handleSubmit} className="payment-form">
       <h4 className="mb-4">Enter Card Details</h4>
+      
+      {/* Cardholder Name Input Field */}
+      <div className="form-group mb-3">
+        <label htmlFor="cardholderName">Cardholder Name</label>
+        <input
+          type="text"
+          id="cardholderName"
+          className="form-control"
+          value={cardholderName}
+          onChange={(e) => setCardholderName(e.target.value)}
+          required
+        />
+      </div>
+
+      {/* Card Element Input */}
       <div className="form-group mb-3">
         <CardElement className="form-control" />
       </div>
+      
+      {/* Package Details */}
       <div className="mb-3">
         <p><strong>Package Name:</strong> {packageDetails.name}</p>
         <p><strong>Description:</strong> {packageDetails.description}</p>
       </div>
+
+      {/* Submit Button */}
       <button type="submit" className="btn btn-primary w-100" disabled={!stripe || loading}>
-        {loading ? 'Processing...' : `Pay $${(amount / 100).toFixed(2)}`}  
+        {loading ? 'Processing...' : `Pay $${(amount / 100).toFixed(2)}`} {/* Show amount as $30 */}
       </button>
     </form>
   );
@@ -222,4 +255,3 @@ const Payment = () => (
 );
 
 export default Payment;
-

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover } from 'react-icons/fa';
 import axios from 'axios';
+import './PaymentManagement.css'; // Import the CSS file
 
 export default function PaymentManagement() {
   const [payments, setPayments] = useState([]);
@@ -19,60 +20,47 @@ export default function PaymentManagement() {
     fetchPayments();
   }, []);
 
-  // Function to filter payments based on the search input
   const filteredPayments = payments.filter(payment =>
-    payment.paymentIntentId.toLowerCase().includes(search.toLowerCase()) ||
-    payment.currency.toLowerCase().includes(search.toLowerCase()) ||
-    payment.amount.toString().includes(search)
+    (payment.cardholderName || '').toLowerCase().includes(search.toLowerCase()) ||
+    (payment.currency || '').toLowerCase().includes(search.toLowerCase()) ||
+    (payment.amount ? payment.amount.toString() : '').includes(search)
   );
 
-  // Function to display appropriate card icon
   const getCardIcon = (paymentMethodType) => {
     switch (paymentMethodType) {
       case 'visa':
-        return <FaCcVisa size={24} />;
+        return <FaCcVisa size={24} className="payment-card-icon" />;
       case 'mastercard':
-        return <FaCcMastercard size={24} />;
+        return <FaCcMastercard size={24} className="payment-card-icon" />;
       case 'amex':
-        return <FaCcAmex size={24} />;
+        return <FaCcAmex size={24} className="payment-card-icon" />;
       case 'discover':
-        return <FaCcDiscover size={24} />;
+        return <FaCcDiscover size={24} className="payment-card-icon" />;
       default:
-        return null;
+        return <FaCcVisa size={24} className="payment-card-icon" />;
     }
   };
 
-  // Function to format date and time separately
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(); // Extract date in local format
-  };
-
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString(); // Extract time in local format
-  };
-
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Payment Management</h2>
+    <div className="payment-management-container mt-4">
+      <h2 className="payment-heading mb-4">Payment Management</h2>
 
       {/* Search Input */}
-      <div className="mb-3">
+      <div className="payment-search mb-3">
         <input
           type="text"
-          className="form-control"
-          placeholder="Search by Payment ID, Currency, or Amount"
+          className="form-control payment-search-input"
+          placeholder="Search by Card Holder Name, Currency, or Amount"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
       {/* Payment Details Table */}
-      <table className="table table-striped table-bordered">
-        <thead className="thead-dark">
+      <table className="payment-table table-striped table-bordered">
+        <thead className="payment-thead">
           <tr>
-            <th scope="col">Payment ID</th>
+            <th scope="col">Card Holder Name</th>
             <th scope="col">Amount</th>
             <th scope="col">Currency</th>
             <th scope="col">Card Type</th>
@@ -84,23 +72,21 @@ export default function PaymentManagement() {
           {filteredPayments.length > 0 ? (
             filteredPayments.map((payment) => (
               <tr key={payment.paymentIntentId}>
-                <td>{payment.paymentIntentId}</td>
+                <td>{payment.cardholderName || 'N/A'}</td>
                 <td>${(payment.amount / 100).toFixed(2)}</td>
-                <td>{payment.currency.toUpperCase()}</td>
+                <td>{payment.currency ? payment.currency.toUpperCase() : 'N/A'}</td>
                 <td>
                   {payment.payment_method_types && payment.payment_method_types.length > 0
                     ? getCardIcon(payment.payment_method_types[0])
-                    : 'N/A'}
+                    : <FaCcVisa size={24} className="payment-card-icon" />}
                 </td>
-                <td>{formatDate(payment.createdAt)}</td>
-                <td>{formatTime(payment.createdAt)}</td>
+                <td>{new Date(payment.createdAt).toLocaleDateString()}</td>
+                <td>{new Date(payment.createdAt).toLocaleTimeString()}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="text-center">
-                No payments found
-              </td>
+              <td colSpan="6" className="text-center">No payments found</td>
             </tr>
           )}
         </tbody>

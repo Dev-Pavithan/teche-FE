@@ -5,8 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
 import CalendarComponent from './CalendarComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faUserCircle, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { Modal } from 'react-bootstrap';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
@@ -16,13 +17,9 @@ export default function Home() {
   const [messageCount, setMessageCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [showNotifications, setShowNotifications] = useState(false);
-
-  // State for package management
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
   const [packages, setPackages] = useState([]);
-  const [packageLoading, setPackageLoading] = useState(true);
-  const [packageError, setPackageError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,9 +32,7 @@ export default function Home() {
         setData({ total, active, blocked });
 
         const messages = JSON.parse(sessionStorage.getItem('messages')) || [];
-        const sortedMessages = messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        const recentMessages = sortedMessages.slice(0, 5);
-
+        const recentMessages = messages.slice(0, 5);
         setMessages(recentMessages);
         animateCountUp(messages.length);
 
@@ -54,8 +49,6 @@ export default function Home() {
         setData({ total: 0, active: 0, blocked: 0 });
         setMessages([]);
         setNotifications([]);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -64,9 +57,7 @@ export default function Home() {
         const response = await axios.get('http://localhost:7100/api/packages');
         setPackages(response.data);
       } catch (error) {
-        setPackageError('Error fetching packages.');
-      } finally {
-        setPackageLoading(false);
+        console.error('Error fetching packages:', error);
       }
     };
 
@@ -74,10 +65,9 @@ export default function Home() {
     fetchPackages();
   }, []);
 
-  // Function to animate number from 0 to total count
   const animateCountUp = (total) => {
     let start = 0;
-    const duration = 1500; 
+    const duration = 1500;
     const stepTime = Math.abs(Math.floor(duration / total));
     const counter = () => {
       if (start < total) {
@@ -87,16 +77,6 @@ export default function Home() {
       }
     };
     counter();
-  };
-
-  const handleNotificationClick = () => {
-    setShowNotifications(!showNotifications);
-    setUnreadCount(0);
-  };
-
-  const clearNotifications = () => {
-    setNotifications([]);
-    setUnreadCount(0);
   };
 
   const donutChartData = {
@@ -109,149 +89,100 @@ export default function Home() {
     }],
   };
 
-  if (loading || packageLoading) {
-    return <div className="container mt-4"><p>Loading...</p></div>;
-  }
-
   return (
-    <div className="container mt-4 home-container">
-      {/* Navbar */}
-      <div className="navbarHome d-flex justify-content-end mb-4">
-        <div className="navbarHome-icons">
-          <div className="icon-wrapper">
-            <FontAwesomeIcon icon={faBell} className="icon bell-icon" onClick={handleNotificationClick} />
-            {unreadCount > 0 && (
-              <span className="badge badge-danger notification-badge">{unreadCount}</span>
-            )}
-            {showNotifications && (
-              <div className="notification-dropdown">
-                <ul className="list-group-notification">
-                  {notifications.length > 0 ? (
-                    notifications.map((notification, index) => (
-                      <li key={index} className="list-group-item">
-                        {notification.message}
-                      </li>
-                    ))
-                  ) : (
-                    <li className="list-group-notification">No notifications</li>
-                  )}
-                </ul>
-                <button className="btn btn-clear mt-2" onClick={clearNotifications}>Clear Notifications</button>
-              </div>
-            )}
-          </div>
-          <div className="icon-wrapper">
-            <FontAwesomeIcon icon={faUserCircle} className="icon user-icon" />
-          </div>
-        </div>
-      </div>
-
-      {/* Main content cards */}
-      <div className="row first-row">
-        <div className="col-md-6 col-lg-4 mb-4">
-          <div className="card h-100">
-            <div className="card-body">
-              <h5 className="card-title">Calendar</h5>
-              <CalendarComponent />
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-6 col-lg-4 mb-4">
-          <div className="card h-100">
-            <div className="card-body">
-              <h5 className="card-title">User Statistics</h5>
-              <Doughnut data={donutChartData} options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: 'top',
-                  },
-                  tooltip: {
-                    callbacks: {
-                      label: function (tooltipItem) {
-                        const dataset = tooltipItem.dataset;
-                        const total = dataset.data.reduce((acc, value) => acc + value, 0);
-                        const value = dataset.data[tooltipItem.dataIndex];
-                        const percentage = ((value / total) * 100).toFixed(2);
-                        return `${tooltipItem.label}: ${value} (${percentage}%)`;
-                      }
-                    }
-                  }
-                }
-              }} />
-              <div className="chart-info mt-3">
-                <p><strong>Total Users:</strong> {data.total}</p>
-                <p><strong>Active Users:</strong> {data.active} ({((data.active / data.total) * 100).toFixed(2)}%)</p>
-                <p><strong>Blocked Users:</strong> {data.blocked} ({((data.blocked / data.total) * 100).toFixed(2)}%)</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Total Messages count */}
-        <div className="col-md-6 col-lg-4 mb-4">
-          <div className="card h-100 text-center d-flex flex-column justify-content-center">
-            <div className="card-body">
-              <h5 className="card-title03">Total Messages</h5>
-              <p className="card-text message-count">
-                <span className="count">{messageCount}</span>
-              </p>
-              <p className="card-text below-text">Messages</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Messages and Available Packages Section */}
+    <div className="container">
       <div className="row">
-        <div className="col-md-8 mb-4">
-          <div className="card h-100">
-            <div className="card-body">
-              <h5 className="card-title">Recent Messages</h5>
-              <ul className="list-group">
-                {messages.length > 0 ? (
-                  messages.map((message) => (
-                    <li key={message._id} className="list-group-item">
-                      <strong>{message.name}:</strong> {message.message}
-                    </li>
-                  ))
-                ) : (
-                  <li className="list-group-item no-messages">No recent messages</li>
-                )}
-              </ul>
-            </div>
+        <div className="col-12 d-flex justify-content-end align-items-center mt-3">
+          <FontAwesomeIcon icon={faBell} className="icon" />
+          <FontAwesomeIcon icon={faCalendar} 
+            className="icon" 
+            onClick={() => setShowCalendar(true)} 
+          />
+          <FontAwesomeIcon icon={faUserCircle} className="icon" />
+        </div>
+      </div>
+
+      <div className="row mt-3">
+        <div className="col-md-4 d-flex flex-column">
+          <div className="total-users card">
+            <h5>Total Users</h5>
+            <p className="message-count">{data.total}</p>
+          </div>
+          <div className="total-messages card">
+            <h5>Total Messages</h5>
+            <p className="message-count">{messageCount}</p>
           </div>
         </div>
 
-        <div className="col-md-4 mb-4">
-          <div className="card h-100">
-            <div className="card-body">
-              <h5 className="card-title">Available Packages</h5>
-              {packageError && <p className="text-danger">{packageError}</p>}
-              <div className="row">
-                {packages.length > 0 ? (
-                  packages.map((pkg) => (
-                    <div key={pkg._id} className="col-md-12 mb-3">
-                      <div className="package-card">
-                        <div className="package-card-body">
-                          <h6 className="package-name">{pkg.name}</h6>
-                          <p className="package-version">Version: {pkg.version}</p>
-                          <p className="package-description">{pkg.description}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>No packages found</p>
-                )}
-              </div>
-            </div>
+        <div className="col-md-4 d-flex justify-content-center align-items-center">
+          <div className="done-chart">
+            <Doughnut data={donutChartData} />
+          </div>
+        </div>
+
+        <div className="col-md-4">
+          <div className="packages-list card">
+            <h5>Available Packages</h5>
+            {packages.length > 0 ? (
+              packages.map((pkg, index) => (
+                <div key={index} className="package-card card mb-3">
+                  <div className="card-body">
+                    <h5 className="package-name">{pkg.name}</h5>
+                    <p className="package-description">{pkg.description}</p>
+                    <button className="btn btn-primary">View Details</button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No packages available</p>
+            )}
           </div>
         </div>
       </div>
+
+      <div className="row mt-3">
+        <div className="col-md-6">
+          <div className="payment-section card">
+            <h5>Payment</h5>
+            {/* Payment details here */}
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="recent-messages card">
+            <h5>Recent Messages</h5>
+            {messages.length > 0 ? (
+              <ul className="message-list">
+                {messages.map((msg, index) => (
+                  <li key={index} className="message-item">
+                    <div className="message-avatar">
+                      <FontAwesomeIcon icon={faUserCircle} className="avatar-icon" />
+                    </div>
+                    <div className="message-content">
+                      <strong>{msg.name}</strong>
+                      <p>{msg.text}</p>
+                      <span className="message-timestamp">{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No recent messages</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      
+
+      {/* Calendar Modal */}
+      <Modal show={showCalendar} onHide={() => setShowCalendar(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Select a Date</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CalendarComponent date={selectedDate} setDate={setSelectedDate} />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
-
-

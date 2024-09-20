@@ -74,6 +74,27 @@
 .home-container {
   padding: 20px;
 }
+.left-navbar button:focus {
+  outline: 2px solid #b676f3; 
+  outline-offset: 2px;
+}
+
+.left-navbar button.active i {
+  color: #000000; 
+}
+
+@media (max-width: 480px) { 
+  .left-navbar {
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+  }
+
+  .right-section {
+    margin-left: 0;
+    padding: 10px; 
+  }
+}
 
 @media (max-width: 768px) {
   .admin-dashboard {

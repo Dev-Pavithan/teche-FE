@@ -1,4 +1,3 @@
-// UserManagement.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -23,16 +22,11 @@ export default function UserManagement() {
     const fetchUsers = async () => {
       try {
         const response = await axios.get('http://localhost:7100/user/all', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         setUsers(response.data);
-        sessionStorage.setItem('users', JSON.stringify(response.data));
-        localStorage.setItem('lastFetchedUsers', new Date().toISOString());
       } catch (error) {
-        console.error('Error fetching users:', error);
         toast.error('Failed to fetch users. Please try again later.');
       }
     };
@@ -44,14 +38,11 @@ export default function UserManagement() {
     const token = sessionStorage.getItem('token');
     try {
       const response = await axios.get(`http://localhost:7100/user/by-email/${searchEmail}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       setFilteredUsers([response.data]);
     } catch (error) {
-      console.error('Error fetching user by email:', error);
       toast.error('User not found.');
       setFilteredUsers([]);
     }
@@ -61,77 +52,64 @@ export default function UserManagement() {
     const token = sessionStorage.getItem('token');
     try {
       const response = await axios.patch(`http://localhost:7100/user/${id}/block`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Update the user's blocked status in state
-      setUsers(users.map(user => user._id === id ? { ...user, blocked: !currentlyBlocked } : user));
-      setFilteredUsers(filteredUsers.map(user => user._id === id ? { ...user, blocked: !currentlyBlocked } : user));
-
+      setUsers(users.map(user => (user._id === id ? { ...user, blocked: !currentlyBlocked } : user)));
       toast.success(response.data.message);
     } catch (error) {
-      console.error('Error toggling user block status:', error);
       toast.error('Failed to toggle user block status.');
     }
   };
 
   return (
-    
-    <div className="container mt-4 user-management">
-      <h2 className="mb-4">Manage Users</h2>
-    
-      {/* Search Bar */}
+    <div className="container mt-4 user-management-container">
+      <h2 className="user-management-heading mb-4">Manage Users</h2>
+
       <div className="d-flex justify-content-end mb-3">
         <input
           type="text"
-          className="form-control me-2"
+          className="form-control search-input me-2"
           placeholder="Search by email"
           value={searchEmail}
           onChange={(e) => setSearchEmail(e.target.value)}
         />
-        <button onClick={handleSearch} className="btn btn-primary">Search</button>
+        <button onClick={handleSearch} className="btn btn-primary search-button">Search</button>
       </div>
 
-      {/* Display Users */}
-      {filteredUsers.length > 0 || searchEmail === '' ? (
-        <div className="table-responsive-scroll">
-          <table className="table table-striped">
-            <thead className="table-dark">
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
+      <div className="table-responsive">
+        <table className="user-table table table-hover table-striped">
+          <thead className="user-table-header">
+            <tr>
+              <th className="user-table-header-id">ID</th>
+              <th className="user-table-header-name">Name</th>
+              <th className="user-table-header-email">Email</th>
+              <th className="user-table-header-role">Role</th>
+              <th className="user-table-header-status">Status</th>
+              <th className="user-table-header-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(filteredUsers.length > 0 ? filteredUsers : users).map((user) => (
+              <tr key={user._id} className="user-table-row">
+                <td className="user-table-data">{user._id}</td>
+                <td className="user-table-data">{user.name}</td>
+                <td className="user-table-data">{user.email}</td>
+                <td className="user-table-data">{user.role}</td>
+                <td className="user-table-data">{user.blocked ? 'Blocked' : 'Active'}</td>
+                <td className="user-table-data">
+                  <button
+                    onClick={() => handleBlockToggle(user._id, user.blocked)}
+                    className={`btn ${user.blocked ? 'btn-success' : 'btn-danger'}`}
+                  >
+                    {user.blocked ? 'Unblock' : 'Block'}
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {(filteredUsers.length > 0 ? filteredUsers : users).map((user) => (
-                <tr key={user._id}>
-                  <td>{user._id}</td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>{user.blocked ? 'Blocked' : 'Active'}</td>
-                  <td>
-                    <button
-                      onClick={() => handleBlockToggle(user._id, user.blocked)}
-                      className={`btn ${user.blocked ? 'btn-success' : 'btn-danger'}`}
-                    >
-                      {user.blocked ? 'Unblock' : 'Block'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p>No users found.</p>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

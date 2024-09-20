@@ -30,18 +30,19 @@ export default function AdminDashboard() {
         <button className={getButtonClassName('/admin/users')} onClick={() => navigate('/admin/users')}>
           <i className="bi bi-person-fill"></i> Manage Users
         </button>
-        <button className={getButtonClassName('/admin/packages')} onClick={() => navigate('/admin/packages')}>
-          <i className="bi bi-box-fill"></i> Manage Packages
-        </button>
         <button className={getButtonClassName('/admin/messages')} onClick={() => navigate('/admin/messages')}>
           <i className="bi bi-envelope-fill"></i> Manage Messages
         </button>
-        <button className={getButtonClassName('/admin/settings')} onClick={() => navigate('/admin/settings')}>
-          <i className="bi bi-gear-fill"></i> Settings
+        <button className={getButtonClassName('/admin/packages')} onClick={() => navigate('/admin/packages')}>
+          <i className="bi bi-box-fill"></i> Manage Packages
         </button>
         <button className={getButtonClassName('/admin/paymentsDetails')} onClick={() => navigate('/admin/paymentsDetails')}>
           <i className="bi bi-credit-card-fill"></i> Payment Details
         </button>
+        <button className={getButtonClassName('/admin/settings')} onClick={() => navigate('/admin/settings')}>
+          <i className="bi bi-gear-fill"></i> Settings
+        </button>
+        
       </div>
       <div className="right-section">
         <Outlet />

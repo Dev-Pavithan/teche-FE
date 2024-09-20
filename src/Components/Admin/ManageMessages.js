@@ -1,10 +1,9 @@
-// ManageMessages.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is imported
-import './ManageMessages.css'; // Ensure to import your custom CSS
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './ManageMessages.css';
 
 export default function ManageMessages() {
   const [messages, setMessages] = useState([]);
@@ -30,7 +29,6 @@ export default function ManageMessages() {
 
         setMessages(response.data);
         sessionStorage.setItem('messages', JSON.stringify(response.data));
-        localStorage.setItem('lastFetchedMessages', new Date().toISOString());
       } catch (error) {
         console.error('Error fetching messages:', error);
         toast.error('Failed to fetch messages. Please try again later.');
@@ -58,50 +56,50 @@ export default function ManageMessages() {
   };
 
   return (
-    <div className="container mt-4 manage-messages">
-      <h2 className="mb-4">Manage Messages</h2>
+    <div className="contact-management-container mt-4">
+      <h2 className="contact-management-heading mb-4">Manage Messages</h2>
 
-      {/* Search Bar */}
-      <div className="d-flex justify-content-end mb-3">
-        <input
-          type="text"
-          className="form-control me-2"
-          placeholder="Search by email"
-          value={searchEmail}
-          onChange={(e) => setSearchEmail(e.target.value)}
-        />
-        <button onClick={handleSearch} className="btn btn-primary">Search</button>
+      <div className="message-search-bar mb-4">
+        <div className="input-group">
+          <input
+            type="text"
+            className="form-control contact-search-input"
+            placeholder="Search by email"
+            value={searchEmail}
+            onChange={(e) => setSearchEmail(e.target.value)}
+          />
+          <button onClick={handleSearch} className="btn btn-primary search-button">Search</button>
+        </div>
       </div>
 
-      {/* Display Messages */}
-      {filteredMessages.length > 0 || searchEmail === '' ? (
-        <div className="table-responsive-scroll">
-          <table className="table table-striped">
-            <thead className="table-dark">
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Message</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(filteredMessages.length > 0 ? filteredMessages : messages).map((message) => (
-                <tr key={message._id}>
-                  <td>{message._id}</td>
-                  <td>{message.name}</td>
-                  <td>{message.email}</td>
-                  <td>{message.phone}</td>
-                  <td>{message.message}</td>
+      <div className="message-table-container table-responsive">
+        <table className="contact-table table table-hover table-striped">
+          <thead className="contact-thead">
+            <tr>
+              <th className="table-header-name">Name</th>
+              <th className="table-header-email">Email</th>
+              <th className="table-header-phone">Phone</th>
+              <th className="table-header-message">Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(filteredMessages.length > 0 ? filteredMessages : messages).length > 0 ? (
+              (filteredMessages.length > 0 ? filteredMessages : messages).map((message) => (
+                <tr key={message._id} className="table-row">
+                  <td className="table-data-name">{message.name}</td>
+                  <td className="table-data-email">{message.email}</td>
+                  <td className="table-data-phone">{message.phone}</td>
+                  <td className="table-data-message">{message.message}</td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p>No messages found.</p>
-      )}
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center">No messages found.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
