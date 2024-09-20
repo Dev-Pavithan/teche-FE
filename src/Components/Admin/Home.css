@@ -1,6 +1,8 @@
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f7f4fa;
+  margin: 0;
+  padding: 20px;
 }
 
 .icon {
@@ -20,15 +22,15 @@ body {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.37);
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.3s;
 }
 
 .card:hover {
   transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
 h5 {
-  font-family: 'Arial', sans-serif;
   font-size: 1.5rem;
   color: #5a4fcf;
   margin-bottom: 15px;
@@ -88,7 +90,6 @@ h5:hover {
 .packages-list {
   max-height: 500px; /* Maximum height of the packages list */
   padding: 20px;
-  height: 500px;
   background-color: #f8f0ff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -96,7 +97,7 @@ h5:hover {
 }
 
 .package-card {
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .package-card:hover {
@@ -119,19 +120,87 @@ h5:hover {
   width: 100%;
 }
 
-.payment-section,
+.payment-section {
+  padding: 15px;
+  height: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f8f0ff;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.payment-section:hover {
+  background-color: #e6e9ff; /* Change background on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.transaction-details {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f3e8ff;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-details h6 {
+  margin-bottom: 8px;
+  color: #5a4fcf;
+}
+
+.detail {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.detail:hover {
+  background-color: #dcd4e8; /* Lighten background on hover */
+}
+
+.detail strong {
+  color: #5a4fcf; /* Change color of strong text */
+}
+
+.recent-transactions {
+  margin-top: 15px;
+}
+
+.transaction-list {
+  list-style: none;
+  padding: 0;
+}
+
+.transaction-item {
+  display: flex;
+  flex-direction: column; /* Stack details vertically */
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background-color: #f8f0ff;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.transaction-item:hover {
+  background-color: #e6e9ff; /* Change background on hover */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+}
+
+.transaction-item p {
+  margin: 5px 0; /* Space out individual details */
+}
+
+.transaction-item strong {
+  color: #5a4fcf; /* Highlight strong text */
+}
+
 .recent-messages {
   padding: 15px;
-}
-
-/* Increased heights */
-.payment-section {
-  height: 300px; /* Increased height for Payment section */
-}
-
-.recent-messages {
-  height: 300px; /* Increased height for Recent Messages */
-  max-height: 300px;
+  height: 400px; /* Increased height for Recent Messages */
+  max-height: 400px;
   overflow-y: auto;
 }
 
@@ -139,14 +208,12 @@ h5:hover {
   margin-bottom: 20px;
 }
 
-.message-list,
-.notification-list {
+.message-list {
   list-style: none;
   padding: 0;
 }
 
-.message-item,
-.notification-item {
+.message-item {
   display: flex;
   align-items: center;
   padding: 10px;
@@ -154,13 +221,11 @@ h5:hover {
   transition: background-color 0.2s;
 }
 
-.message-item:hover,
-.notification-item:hover {
+.message-item:hover {
   background-color: #f1f1f1;
 }
 
-.message-avatar,
-.notification-icon {
+.message-avatar {
   margin-right: 10px;
 }
 
@@ -173,8 +238,7 @@ h5:hover {
   flex-grow: 1;
 }
 
-.message-timestamp,
-.notification-timestamp {
+.message-timestamp {
   font-size: 0.8rem;
   color: #999;
   margin-left: auto;
@@ -182,4 +246,14 @@ h5:hover {
 
 .modal-content {
   border-radius: 10px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .total-users,
+  .total-messages,
+  .payment-section,
+  .recent-messages {
+    height: auto; /* Allow height to adjust on smaller screens */
+  }
 }

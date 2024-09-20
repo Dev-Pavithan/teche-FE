@@ -20,63 +20,108 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   const [packages, setPackages] = useState([]);
+  const [recentTransactions, setRecentTransactions] = useState([]);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const users = JSON.parse(sessionStorage.getItem('users')) || [];
-        const total = users.length;
-        const active = users.filter(user => !user.blocked).length;
-        const blocked = total - active;
-
-        setData({ total, active, blocked });
-
-        const messages = JSON.parse(sessionStorage.getItem('messages')) || [];
-        const recentMessages = messages.slice(0, 5);
-        setMessages(recentMessages);
-        animateCountUp(messages.length);
-
-        const newNotifications = recentMessages.map((msg) => ({
-          type: 'message',
-          message: `New message from ${msg.name}`,
-          timestamp: msg.timestamp,
-        }));
-
-        setNotifications(newNotifications);
-        setUnreadCount(newNotifications.length);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setData({ total: 0, active: 0, blocked: 0 });
-        setMessages([]);
-        setNotifications([]);
-      }
-    };
-
-    const fetchPackages = async () => {
-      try {
-        const response = await axios.get('http://localhost:7100/api/packages');
-        setPackages(response.data);
-      } catch (error) {
-        console.error('Error fetching packages:', error);
-      }
-    };
-
     fetchData();
     fetchPackages();
+    fetchRecentTransactions();
+    fetchTotalIncome();
   }, []);
 
-  const animateCountUp = (total) => {
+  const fetchData = async () => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      console.error('No authentication token found.');
+      return;
+    }
+
+    try {
+      const response = await axios.get('http://localhost:7100/user/all', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const users = response.data;
+      const total = users.length;
+      const active = users.filter(user => !user.blocked).length;
+      const blocked = total - active;
+
+      animateCountUp(total, setData, 'total');
+      setData(prev => ({ ...prev, active, blocked }));
+
+      const messages = JSON.parse(sessionStorage.getItem('messages')) || [];
+      const recentMessages = messages.slice(0, 5);
+      setMessages(recentMessages);
+      animateCountUp(messages.length, setMessageCount);
+
+      const newNotifications = recentMessages.map((msg) => ({
+        type: 'message',
+        message: `New message from ${msg.name}`,
+        timestamp: msg.timestamp,
+      }));
+
+      setNotifications(newNotifications);
+      setUnreadCount(newNotifications.length);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setData({ total: 0, active: 0, blocked: 0 });
+      setMessages([]);
+      setNotifications([]);
+    }
+  };
+
+  const fetchPackages = async () => {
+    try {
+      const response = await axios.get('http://localhost:7100/api/packages');
+      setPackages(response.data);
+    } catch (error) {
+      console.error('Error fetching packages:', error);
+    }
+  };
+
+  const fetchRecentTransactions = async () => {
+    try {
+      const response = await axios.get('http://localhost:7100/api/payments/payment-intents');
+      setRecentTransactions(response.data.slice(0, 3));
+    } catch (error) {
+      console.error('Error fetching recent transactions:', error);
+    }
+  };
+
+  const fetchTotalIncome = async () => {
+    try {
+      const response = await axios.get('http://localhost:7100/api/payments/payment-intents');
+      const totalIncome = response.data.reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
+      setTotalIncome(totalIncome);
+    } catch (error) {
+      console.error('Error fetching total income:', error);
+    }
+  };
+
+  const animateCountUp = (total, setValue, field = 'messageCount') => {
     let start = 0;
     const duration = 1500;
     const stepTime = Math.abs(Math.floor(duration / total));
     const counter = () => {
       if (start < total) {
         start += 1;
-        setMessageCount(start);
+        if (field === 'total') {
+          setValue(prev => ({ ...prev, total: start }));
+        } else {
+          setValue(start);
+        }
         setTimeout(counter, stepTime);
       }
     };
     counter();
+  };
+
+  const handleTransactionClick = (transaction) => {
+    setSelectedTransaction(transaction);
+    setShowDetails(true);
   };
 
   const donutChartData = {
@@ -94,10 +139,7 @@ export default function Home() {
       <div className="row">
         <div className="col-12 d-flex justify-content-end align-items-center mt-3">
           <FontAwesomeIcon icon={faBell} className="icon" />
-          <FontAwesomeIcon icon={faCalendar} 
-            className="icon" 
-            onClick={() => setShowCalendar(true)} 
-          />
+          <FontAwesomeIcon icon={faCalendar} onClick={() => setShowCalendar(true)} className="icon" />
           <FontAwesomeIcon icon={faUserCircle} className="icon" />
         </div>
       </div>
@@ -143,10 +185,25 @@ export default function Home() {
       <div className="row mt-3">
         <div className="col-md-6">
           <div className="payment-section card">
-            <h5>Payment</h5>
-            {/* Payment details here */}
+            <h5>Total Income: ${(totalIncome / 100).toFixed(2)}</h5>
+            <div className="recent-transactions">
+              <h6>Recent Transactions</h6>
+              {recentTransactions.length > 0 ? (
+                <ul className="transaction-list">
+                  {recentTransactions.map((transaction, index) => (
+                    <li key={index} className="transaction-item" onClick={() => handleTransactionClick(transaction)}>
+                      <p><strong>Card Holder:</strong> {transaction.cardholderName}</p>
+                      <p><strong>Amount:</strong> ${(transaction.amount / 100).toFixed(2)}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No recent transactions</p>
+              )}
+            </div>
           </div>
         </div>
+
         <div className="col-md-6">
           <div className="recent-messages card">
             <h5>Recent Messages</h5>
@@ -172,8 +229,6 @@ export default function Home() {
         </div>
       </div>
 
-      
-
       {/* Calendar Modal */}
       <Modal show={showCalendar} onHide={() => setShowCalendar(false)}>
         <Modal.Header closeButton>
@@ -181,6 +236,25 @@ export default function Home() {
         </Modal.Header>
         <Modal.Body>
           <CalendarComponent date={selectedDate} setDate={setSelectedDate} />
+        </Modal.Body>
+      </Modal>
+
+      {/* Transaction Details Modal */}
+      <Modal show={showDetails} onHide={() => setShowDetails(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Transaction Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedTransaction && (
+            <>
+              <p><strong>Card Holder:</strong> {selectedTransaction.cardholderName}</p>
+              <p><strong>Amount:</strong> ${(selectedTransaction.amount / 100).toFixed(2)}</p>
+              <p><strong>Currency:</strong> {selectedTransaction.currency?.toUpperCase() || 'N/A'}</p>
+              <p><strong>Date:</strong> {new Date(selectedTransaction.createdAt).toLocaleDateString()}</p>
+              <p><strong>Time:</strong> {new Date(selectedTransaction.createdAt).toLocaleTimeString()}</p>
+              {/* Add more details as necessary */}
+            </>
+          )}
         </Modal.Body>
       </Modal>
     </div>

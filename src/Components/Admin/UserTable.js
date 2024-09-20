@@ -24,7 +24,6 @@ export default function UserManagement() {
         const response = await axios.get('http://localhost:7100/user/all', {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         setUsers(response.data);
       } catch (error) {
         toast.error('Failed to fetch users. Please try again later.');
@@ -41,7 +40,12 @@ export default function UserManagement() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setFilteredUsers([response.data]);
+      if (response.data) {
+        setFilteredUsers([response.data]);
+      } else {
+        toast.error('User not found.');
+        setFilteredUsers([]);
+      }
     } catch (error) {
       toast.error('User not found.');
       setFilteredUsers([]);
@@ -74,30 +78,30 @@ export default function UserManagement() {
           value={searchEmail}
           onChange={(e) => setSearchEmail(e.target.value)}
         />
-        <button onClick={handleSearch} className="btn btn-primary search-button">Search</button>
+        <button onClick={handleSearch} className="btn btn-primary">Search</button>
       </div>
 
       <div className="table-responsive">
         <table className="user-table table table-hover table-striped">
-          <thead className="user-table-header">
+          <thead>
             <tr>
-              <th className="user-table-header-id">ID</th>
-              <th className="user-table-header-name">Name</th>
-              <th className="user-table-header-email">Email</th>
-              <th className="user-table-header-role">Role</th>
-              <th className="user-table-header-status">Status</th>
-              <th className="user-table-header-actions">Actions</th>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {(filteredUsers.length > 0 ? filteredUsers : users).map((user) => (
-              <tr key={user._id} className="user-table-row">
-                <td className="user-table-data">{user._id}</td>
-                <td className="user-table-data">{user.name}</td>
-                <td className="user-table-data">{user.email}</td>
-                <td className="user-table-data">{user.role}</td>
-                <td className="user-table-data">{user.blocked ? 'Blocked' : 'Active'}</td>
-                <td className="user-table-data">
+              <tr key={user._id}>
+                <td>{user._id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>{user.blocked ? 'Blocked' : 'Active'}</td>
+                <td>
                   <button
                     onClick={() => handleBlockToggle(user._id, user.blocked)}
                     className={`btn ${user.blocked ? 'btn-success' : 'btn-danger'}`}
